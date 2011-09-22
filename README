@@ -1,0 +1,80 @@
+NAME
+    Sub::Spec::Gen::ForModule - Generate spec for subroutines in a module
+
+VERSION
+    version 0.01
+
+SYNOPSIS
+    In Foo.pm:
+
+     package Foo;
+     sub sub1 { ... }
+     sub sub2 { ... }
+     1;
+
+    In another script:
+
+     use Sub::Spec::Gen::FromModule qw(gen_spec_for_module);
+     gen_spec_for_module(module=>'Foo');
+
+    Now Foo's functions have sub specs (in %Foo::SPEC).
+
+DESCRIPTION
+    This module provides gen_spec_for_module().
+
+    This module uses Log::Any for logging framework.
+
+    This module's functions has Sub::Spec specs.
+
+FUNCTIONS
+    None are exported by default, but they are exportable.
+
+  gen_spec_for_module(%args) -> [STATUS_CODE, ERR_MSG, RESULT]
+    Generate spec for subroutines in a module.
+
+    This function can be used to automatically generate spec for
+    "traditional" functions, which means regular Perl subroutines in a Perl
+    module.
+
+    The resulting spec will be put in %<PACKAGE>::SPEC. Functions that
+    already have spec in the %SPEC will be skipped. The spec will have
+    "result_naked" clause set to true, "args_as" set to "array", and "args"
+    set to "{args =" ["any" => {arg_pos=>0, arg_greedy=>1}]}>. In the
+    future, function's arguments will be parsed from POD or other
+    indicators.
+
+    Returns a 3-element arrayref. STATUS_CODE is 200 on success, or an error
+    code between 3xx-5xx (just like in HTTP). ERR_MSG is a string containing
+    error message, RESULT is the actual result.
+
+    Arguments ("*" denotes required arguments):
+
+    *   exclude_subs => *array|str*
+
+        If specified, exclude these subs.
+
+    *   include_subs => *array|str*
+
+        If specified, only include these subs.
+
+    *   load* => *bool* (default 1)
+
+        Whether to load the module using require().
+
+    *   module* => *str*
+
+        The module name.
+
+FAQ
+SEE ALSO
+    Sub::Spec
+
+AUTHOR
+    Steven Haryanto <stevenharyanto@gmail.com>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2011 by Steven Haryanto.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
